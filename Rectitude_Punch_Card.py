@@ -1,41 +1,60 @@
+import os
+os.environ["KIVY_NO_CONSOLELOG"] = "1"
 from kivy.app import App
-import kivy
-import time
-import csv
-
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
-
+import kivy
 kivy.require('1.11.0')
+import time
+import csv
 
 
 class Rectitude_Punch_Card(App):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.x = TextInput(font_size=50, multiline=False, halign="center")
-        self.label_time = Label(text=self.display_time(
-        ), font_size=100, halign='auto', valign='center')
+        self.icInput = TextInput(
+            font_size=50, 
+            multiline=False, 
+            halign="center")
+
+        self.label_time = Label(
+            text=self.display_time(), 
+            font_size=100, 
+            halign='auto', 
+            valign='center')
 
     def build(self):
-        box = BoxLayout(orientation='vertical', spacing=50)
-        label = Label(text='Enter NRIC No. below:', font_size=40)
-        button = Button(text='Register Attendance', background_color=(
-            0, 0, 1, 1), font_size=40, on_press=self.get_nric)
-        button_test = Button(text='display test message', on_press=self.test)
+        box = BoxLayout(
+            orientation='vertical',
+            spacing=50)
+
+        label = Label(
+            text='Enter NRIC No. below:', 
+            font_size=40)
+
+        button = Button(
+            text='Register Attendance', 
+            background_color=(0, 0, 1, 1), 
+            font_size=40, 
+            on_press=self.get_nric)
+
+        button_test = Button(
+            text='display test message', 
+            on_press=self.test)
 
         box.add_widget(self.label_time)
         box.add_widget(label)
-        box.add_widget(self.x)
+        box.add_widget(self.icInput)
         box.add_widget(button)
         box.add_widget(button_test)
 
         return box
 
     def get_nric(self, args):
-        nric = self.x.text
+        nric = self.icInput.text
         return str(nric).upper()
 
     @staticmethod
@@ -75,8 +94,12 @@ class Rectitude_Punch_Card(App):
                     self.data.append(row)
 
         except FileNotFoundError as identifier:
+            print("not found")
             with open(path, 'a') as f:
-                pass
+                print("create new")
+                header = ['Day','In','Out']
+                self.data.append(header)
+                f.close()
 
     def write_csv(self):
         '''
@@ -93,25 +116,35 @@ class Rectitude_Punch_Card(App):
 
         5. 在写入数据的时候先获取日子, 然后遍历查找这个日子, 如果有的话, 添加out
 
-        6. 如果没有这个日子, 说明是in.
+        6. 遍历结束, 如果没有这个日子, 说明是in. 增加一行
         '''
 
         today = self.get_day()
         path = self.get_nric(1) + ".csv"
         day = []  # day ==> ['10','08:00','18:00']
 
+        index = 0
         # out
         for row in self.data:
+            index += 1
             if(row[0] == today):
                 row.append(self.get_time())
 
-        # TODO in
+        if(index == len(self.data) and self.data[index-1][0] != today):
+            day.append(self.get_day())
+            day.append(self.get_time())
+            self.data.append(day)
 
-        # TODO csv末尾有两行空白文件, 导致 上面的循环 out of index
+
+        for row in self.data:
+            if(len(row)>=3):
+                row[2], row[-1] = row[-1], row[2]
+
+        print(self.data)
+
 
         with open(path, 'w', newline="") as f:
             writer = csv.writer(f)
-            self.data.append(day)
             writer.writerows(self.data)
 
     def submit(self):
