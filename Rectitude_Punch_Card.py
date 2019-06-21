@@ -19,6 +19,8 @@ kivy.require('1.11.0')
 import time
 import csv
 
+import sendEmail as se
+
 class Rectitude_Punch_Card(App):
 
     def __init__(self, **kwargs):
@@ -40,24 +42,36 @@ class Rectitude_Punch_Card(App):
     def build(self):
         box = BoxLayout(
             orientation='vertical',
-            spacing=30)
+            spacing=20)
 
         label = Label(
             text='Enter NRIC No. below:', 
             color=(0/255,151/255,239/255,1),
-            font_size=60)
+            font_size=40)
 
         button = Button(
             text='Register Attendance', 
             color=(30/255,228/255,147/255,1),
             background_color=( 71/255, 69/255, 69/255, 1), 
-            font_size=40, 
+            font_size=50, 
+            on_press=self.confirm)        
+
+        button_submit = Button(
+            text='======>SUBMIT RECORDS<======', 
+            font_size= 30,
+            color=(222/255,28/255,75/255,1),
+            background_color=(0,0,0,1), 
             on_press=self.confirm)
 
+        if(self.get_day()=="21"):
+            box.add_widget(button_submit)
+            
         box.add_widget(self.label_time)
         box.add_widget(label)
         box.add_widget(self.icInput)
         box.add_widget(button)
+
+        
 
         return box
 
@@ -154,6 +168,12 @@ class Rectitude_Punch_Card(App):
         '''
         self.get_csv()
         self.write_csv()
+
+        # TODO 这里做一个判断, 如果是1号的话出现额外的按钮
+        # TODO 增加一个按钮跳转到另外一个页面, 显示随机数字, 输入数字确认后发送并且删除文件
+        while False:
+            se.sendEmail().send()
+
         App.stop(1)
 
 
