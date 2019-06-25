@@ -3,6 +3,7 @@ from email.mime.text import MIMEText
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
 import getFileNames as gfn
+import Rectitude_Punch_Card as rpc
 
 class sendEmail():
     def send(self):
@@ -20,9 +21,9 @@ class sendEmail():
         '''
 
 
-        files= gfn.getFileNames().get_csvs()
+        files= gfn.getFileNames().operate_csvs(1)
 
-        file1 = str(files)
+        # file1 = str(files)
 
         message = MIMEMultipart()
         message['From'] = Header(from_name, 'utf-8')   
@@ -47,6 +48,8 @@ class sendEmail():
             smtpObj.login(mail_user,mail_pass)
             smtpObj.sendmail(mail_user, receivers, message.as_string())
             print ("邮件发送成功")
+            gfn.getFileNames().operate_csvs(2)
+            rpc.Rectitude_Punch_Card().close_programme()
         except smtplib.SMTPException as e:
             print ("Error: 无法发送邮件.    "+e)
 

@@ -1,10 +1,14 @@
+import os
+os.environ["KIVY_NO_CONSOLELOG"] = "1"
+
 from kivy.config import Config
+
+
 Config.set('graphics', 'resizable', False)
 Config.set('graphics', 'width', '600')
 Config.set('graphics', 'height', '450')
 
-import os
-os.environ["KIVY_NO_CONSOLELOG"] = "1"
+
 
 from kivy.core.window import Window
 Window.clearcolor = (40/255, 44/255,52/255, 1)
@@ -61,17 +65,15 @@ class Rectitude_Punch_Card(App):
             font_size= 30,
             color=(222/255,28/255,75/255,1),
             background_color=(0,0,0,1), 
-            on_press=self.confirm)
+            on_press=self.send_out_by_Email)
 
-        if(self.get_day()=="21"):
+        if(self.get_day()=="24"):
             box.add_widget(button_submit)
             
         box.add_widget(self.label_time)
         box.add_widget(label)
         box.add_widget(self.icInput)
         box.add_widget(button)
-
-        
 
         return box
 
@@ -159,7 +161,10 @@ class Rectitude_Punch_Card(App):
         with open(path, 'w', newline="") as f:
             writer = csv.writer(f)
             writer.writerows(self.data)
-
+    
+    def send_out_by_Email(self,indentifier):
+        se.sendEmail().send()
+ 
     def submit(self):
         '''
         1. 获取NRIC
@@ -168,12 +173,9 @@ class Rectitude_Punch_Card(App):
         '''
         self.get_csv()
         self.write_csv()
+        self.close_programme()
 
-        # TODO 这里做一个判断, 如果是1号的话出现额外的按钮
-        # TODO 增加一个按钮跳转到另外一个页面, 显示随机数字, 输入数字确认后发送并且删除文件
-        while False:
-            se.sendEmail().send()
-
+    def close_programme(self):
         App.stop(1)
 
 
