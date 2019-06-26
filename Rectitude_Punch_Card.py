@@ -1,14 +1,11 @@
+import sendEmail as se
 import os
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 
 from kivy.config import Config
-
-
 Config.set('graphics', 'resizable', False)
 Config.set('graphics', 'width', '600')
 Config.set('graphics', 'height', '450')
-
-
 
 from kivy.core.window import Window
 Window.clearcolor = (40/255, 44/255,52/255, 1)
@@ -23,7 +20,6 @@ kivy.require('1.11.0')
 import time
 import csv
 
-import sendEmail as se
 
 class Rectitude_Punch_Card(App):
 
@@ -67,7 +63,7 @@ class Rectitude_Punch_Card(App):
             background_color=(0,0,0,1), 
             on_press=self.send_out_by_Email)
 
-        if(self.get_day()=="24"):
+        if(self.get_day()=="1"):
             box.add_widget(button_submit)
             
         box.add_widget(self.label_time)
@@ -116,7 +112,7 @@ class Rectitude_Punch_Card(App):
                     # data ==> [['18', '08:00', '19:00'], ['19', '09:00', '20:00']]
                     self.data.append(row)
 
-        except FileNotFoundError as identifier:
+        except FileNotFoundError:
             print("not found")
             with open(path, 'a') as f:
                 print("create new")
@@ -136,6 +132,7 @@ class Rectitude_Punch_Card(App):
         5. 在写入数据的时候先获取日子, 然后遍历查找这个日子, 如果有的话, 添加out
         6. 遍历结束, 如果没有这个日子, 说明是in. 增加一行
         '''
+ 
         today = self.get_day()
         path = self.get_nric(1) + ".csv"
         day = []  # day ==> ['10','08:00','18:00']
@@ -162,7 +159,7 @@ class Rectitude_Punch_Card(App):
             writer = csv.writer(f)
             writer.writerows(self.data)
     
-    def send_out_by_Email(self,indentifier):
+    def send_out_by_Email(self,args):
         se.sendEmail().send()
  
     def submit(self):
@@ -176,7 +173,7 @@ class Rectitude_Punch_Card(App):
         self.close_programme()
 
     def close_programme(self):
-        App.stop(1)
+        App.stop(self,1)
 
 
 if __name__ == '__main__':
