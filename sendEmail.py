@@ -9,10 +9,10 @@ class sendEmail():
     def send(self):
         # 第三方 SMTP 服务
         mail_host="smtp.gmail.com"  
-        mail_user="gongjiajiiii@gmail.com"    
-        mail_pass="19M46g92$"    
+        mail_user="enter your email address here"    
+        mail_pass="enter your password here"    
 
-        receivers = ['tech@rectitude.com.sg']
+        receivers = ["enter admin's address here"]
 
         subject = 'Subject'
         from_name = 'From'
