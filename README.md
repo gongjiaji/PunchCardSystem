@@ -4,6 +4,7 @@ The staff can register attendence by enter IC number / name or whatever could in
 - The first punch is 'in'
 - From the second punch onward, it's 'out'. If mulitple punches recorded, only the last punch is valid.
 The punch records are stored in CSV file, the file name is the staff's IC/name.. etc.
+
 A 'submit' button will be appear every 1st day of the month. The button could send records to the admin's email automatially.
 
 # Dependency
