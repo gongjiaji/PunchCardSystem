@@ -1,30 +1,37 @@
-# Main features
+# Punch card system for stores of Rectitude pte ltd
 
-The staff can register attendence by enter IC number / name or whatever could indicate identity.
-- The first punch is 'in'
-- From the second punch onward, it's 'out'. If mulitple punches recorded, only the last punch is valid.
-The punch records are stored in CSV file, the file name is the staff's IC/name.. etc.
+## Main features
 
-A 'submit' button will be appear every 1st day of the month. The button could send records to the admin's email automatially.
+The staff can register attendance by clicking his name.
+The staff can submit monthly records to the admin by email.
 
-# Dependency
+- The first register is 'in'
+- From the second register onward, it's 'out'.
+- If multiple punches recorded, only the last punch is valid. Although all the activities will be recorded.
+  
+The punch records are stored in CSV file, the file name is the staff's Name.
 
-The programme is build on Kivy, a python GUI library. Visit https://kivy.org/#home for more information.
+A 'submit' button is located at the corner of this programme, the button could send records to the admin's email.
 
+*users.txt* contains the staffs' name of a branch. The code is design for 3 users only. Refer to the comment in the *Rectitude_Punch_Card.py* to add more users.
 
-# 主要功能
+## Dependency
 
-员工可以输入自己的IC号码进行打卡操作
+The programme is build on **Kivy**, a python GUI library. Visit https://kivy.org/#home for more information.
 
-- 当天的第一次打卡为in
-- 当天的第二次及以后为out, 如果打了很多次卡, 保留最后一次打卡为out
+## How to use
 
-打卡信息保存在csv文件里, csv文件名为员工IC号码.
+set up your personal file to store Email SMTP, user name, password, the receivers.
+amend the file path in *sendEmail.py* in *get_email_info()*
 
-每个月的1号, GUI会显示多一个SUBMIT按钮, 由店长点击讲数据发送给admin进行处理
+### home page
 
-- 只有店长有权力进行操作
-- 店长点击按钮以后, 搜集所有的.csv文件, 自动发送邮件到admin邮箱
-- 邮件发送以后, 清楚所有的上月记录, 以便记录新的数据.
-- 此时员工打开会建立新的文件
-- 关闭程序
+![Home](screenshots/171731575090759_.pic.jpg)
+
+### click name to record
+
+![click](screenshots/171761575090803_.pic.jpg)
+
+### submit records
+
+![email](screenshots/171831575090875_.pic.jpg)
